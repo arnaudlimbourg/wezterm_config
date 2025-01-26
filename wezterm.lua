@@ -1,44 +1,27 @@
 -- Pull in the wezterm API
 local wezterm = require 'wezterm'
 
--- This table will hold the configuration.
-local config = {}
-
--- In newer versions of wezterm, use the config_builder which will
--- help provide clearer error messages
-if wezterm.config_builder then
-  config = wezterm.config_builder()
-end
+local config = wezterm.config_builder()
 
 -- Start of my configuration
 
+config.default_prog = { '/opt/homebrew/bin/nu' }
+
 -- Set a light theme, not using the built-in as this version also applies to the tab bar
-local colors = require('lua/rose-pine-dawn').colors()
-local window_frame = require('lua/rose-pine-dawn').window_frame()
+local theme = require('lua/rose-pine').dawn
 
--- Overrides the cell background color when the current cell is occupied by the
--- -- cursor and the cursor style is set to Block
--- colors.cursor_bg = '#9893a5'
--- -- Overrides the text color when the current cell is occupied by the cursor
--- colors.cursor_fg = 'black'
--- -- Specifies the border color of the cursor when the cursor style is set to Block,
--- -- or the color of the vertical or horizontal bar when the cursor style is set to
--- -- Bar or Underline.
--- colors.cursor_border = '#9893a5'
-
-config.colors = colors
-config.window_frame = window_frame -- needed only if using fancy tab bar
-config.window_background_opacity = 0.9
-
+config.colors = theme.colors()
+config.window_frame = theme.window_frame() -- needed only if using fancy tab bar
+config.window_background_opacity = 1
+config.adjust_window_size_when_changing_font_size = false
 
 -- Using a patched MonoLisa
 config.font = wezterm.font_with_fallback {
-  'MonoLisa Nerd Font',
-  'JuliaMono',
-  'JetBrains Mono',
-  'DengXian',
+  'MonoLisa',
+  'JetBrainsMono Nerd Font',
 }
 
+-- useful keyboards shortcuts I have come on to rely
 config.keys = {
   -- Turn off the default CMD-m Hide action, allowing CMD-m to
   -- be potentially recognized and handled by the tab
